@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 void main() => runApp(MaterialApp(home: MyApp()));
 
@@ -23,6 +24,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  final databaseReference = FirebaseDatabase.instance.reference();
   int hour = 0;
   int min = 0;
   int sec = 0;
@@ -31,6 +33,7 @@ class _BodyState extends State<Body> {
   int timeForTimer = 0;
   String timeToDisplay = "";
   bool checkTimer = true;
+
   void start() {
     setState(() {
       started = false;
@@ -45,6 +48,7 @@ class _BodyState extends State<Body> {
             Scaffold.of(context).showSnackBar(SnackBar(
               content: Text("Turned OFF"),
             ));
+            databaseReference.reference().update({'c': '{\"K\":0.0}'});
           }
           checkTimer = true;
           timeToDisplay = "";
@@ -56,14 +60,17 @@ class _BodyState extends State<Body> {
 //                builder: (context) => MyApp(),
 //              ));
         } else if (timeForTimer < 60) {
+          databaseReference.reference().update({'c': '{\"A\":$timeForTimer}'});
           timeToDisplay = "Time Left  " + timeForTimer.toString();
           timeForTimer = timeForTimer - 1;
         } else if (timeForTimer < 3600) {
+          databaseReference.reference().update({'c': '{\"A\":$timeForTimer}'});
           int m = timeForTimer ~/ 60;
           int s = timeForTimer - (60 * m);
           timeToDisplay = "Time Left  " + m.toString() + ":" + s.toString();
           timeForTimer = timeForTimer - 1;
         } else {
+          databaseReference.reference().update({'c': '{\"A\":$timeForTimer}'});
           int h = timeForTimer ~/ 3600;
           int t = timeForTimer - (3600 * h);
           int m = t ~/ 60;
@@ -85,6 +92,7 @@ class _BodyState extends State<Body> {
       started = true;
       stopped = true;
       checkTimer = false;
+      databaseReference.reference().update({'c': '{\"A\":0.0}'});
     });
   }
 
@@ -130,7 +138,9 @@ class _BodyState extends State<Body> {
           RaisedButton(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
-            onPressed: () {},
+            onPressed: () {
+              databaseReference.reference().update({'c': '{\"K\":0.0}'});
+            },
             padding: EdgeInsets.all(16.0),
             color: Colors.deepOrange,
             child: Text(
