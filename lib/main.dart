@@ -245,7 +245,7 @@ class _BodyState extends State<Body> {
                 child: Text("Stop"),
               )
             ],
-          )
+          ),
         ],
       ),
     );
