@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -24,6 +26,14 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  @override
+  void initState() {
+    super.initState();
+    vesselVisible();
+    flameVisible();
+    setKnobAngle();
+  }
+
   final databaseReference = FirebaseDatabase.instance.reference();
   int hour = 0;
   int min = 0;
@@ -33,6 +43,9 @@ class _BodyState extends State<Body> {
   int timeForTimer = 0;
   String timeToDisplay = "";
   bool checkTimer = true;
+  bool vessel = true;
+  bool flame = true;
+  double knobAngle = -pi / 4;
 
   void start() {
     setState(() {
@@ -104,15 +117,27 @@ class _BodyState extends State<Body> {
           SizedBox(
             height: 50,
           ),
-          Image(
-            image: AssetImage('images/vessel.png'),
-            height: 150.0,
-            width: 300.0,
+          Visibility(
+            maintainSize: true,
+            maintainAnimation: true,
+            maintainState: true,
+            visible: vessel,
+            child: Image(
+              image: AssetImage('images/vessel.png'),
+              height: 150.0,
+              width: 300.0,
+            ),
           ),
-          Image(
-            image: AssetImage('images/fire.png'),
-            height: 50,
-            width: 200,
+          Visibility(
+            visible: flame,
+            maintainSize: true,
+            maintainAnimation: true,
+            maintainState: true,
+            child: Image(
+              image: AssetImage('images/fire.png'),
+              height: 50,
+              width: 200,
+            ),
           ),
           Stack(
             children: <Widget>[
@@ -126,10 +151,13 @@ class _BodyState extends State<Body> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 45.0),
                 child: Center(
-                  child: Image(
-                    image: AssetImage('images/circle.png'),
-                    height: 65,
-                    width: 65,
+                  child: Transform.rotate(
+                    angle: knobAngle,
+                    child: Image(
+                      image: AssetImage('images/circle.png'),
+                      height: 65,
+                      width: 65,
+                    ),
                   ),
                 ),
               ),
@@ -249,5 +277,54 @@ class _BodyState extends State<Body> {
         ],
       ),
     );
+  }
+
+  void vesselVisible() {
+    databaseReference.onChildChanged.listen((event) {
+      databaseReference.once().then((DataSnapshot snap) {
+        if (jsonDecode(snap.value['s'])['D'] == 1) {
+          setState(() {
+            vessel = true;
+          });
+        } else {
+          setState(() {
+            vessel = false;
+          });
+        }
+      });
+    });
+  }
+
+  void flameVisible() {
+    databaseReference.onChildChanged.listen((event) {
+      databaseReference.once().then((DataSnapshot snap) {
+        if (jsonDecode(snap.value['s'])['K'] == 0) {
+          setState(() {
+            flame = false;
+          });
+        } else {
+          setState(() {
+            flame = true;
+          });
+        }
+      });
+    });
+  }
+
+  void setKnobAngle() {
+    databaseReference.onChildChanged.listen((event) {
+      databaseReference.once().then((DataSnapshot snap) {
+        if (jsonDecode(snap.value['s'])['K'] > 0) {
+          setState(() {
+            knobAngle =
+                ((jsonDecode(snap.value['s'])['K']) * pi / 180) - pi / 4;
+          });
+        } else {
+          setState(() {
+            knobAngle = -pi / 4;
+          });
+        }
+      });
+    });
   }
 }
