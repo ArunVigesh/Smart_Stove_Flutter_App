@@ -112,169 +112,171 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
-        children: <Widget>[
-          SizedBox(
-            height: 50,
-          ),
-          Visibility(
-            maintainSize: true,
-            maintainAnimation: true,
-            maintainState: true,
-            visible: vessel,
-            child: Image(
-              image: AssetImage('images/vessel.png'),
-              height: 150.0,
-              width: 300.0,
-            ),
-          ),
-          Visibility(
-            visible: flame,
-            maintainSize: true,
-            maintainAnimation: true,
-            maintainState: true,
-            child: Image(
-              image: AssetImage('images/fire.png'),
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            SizedBox(
               height: 50,
-              width: 200,
             ),
-          ),
-          Stack(
-            children: <Widget>[
-              Center(
-                child: Image(
-                  image: AssetImage('images/stove.png'),
-                  height: 120,
-                  width: 300,
-                ),
+            Visibility(
+              maintainSize: true,
+              maintainAnimation: true,
+              maintainState: true,
+              visible: vessel,
+              child: Image(
+                image: AssetImage('images/vessel.png'),
+                height: 150.0,
+                width: 300.0,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 45.0),
-                child: Center(
-                  child: Transform.rotate(
-                    angle: knobAngle,
-                    child: Image(
-                      image: AssetImage('images/circle.png'),
-                      height: 65,
-                      width: 65,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          RaisedButton(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            onPressed: () {
-              databaseReference.reference().update({'c': '{\"K\":0.0}'});
-            },
-            padding: EdgeInsets.all(16.0),
-            color: Colors.deepOrange,
-            child: Text(
-              "Turn OFF",
-              style: TextStyle(color: Colors.white),
             ),
-          ),
-          SizedBox(
-            height: 30.0,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 10.0),
-                    child: Text(
-                      "HH",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+            Visibility(
+              visible: flame,
+              maintainSize: true,
+              maintainAnimation: true,
+              maintainState: true,
+              child: Image(
+                image: AssetImage('images/fire.png'),
+                height: 50,
+                width: 200,
+              ),
+            ),
+            Stack(
+              children: <Widget>[
+                Center(
+                  child: Image(
+                    image: AssetImage('images/stove.png'),
+                    height: 120,
+                    width: 300,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 45.0),
+                  child: Center(
+                    child: Transform.rotate(
+                      angle: knobAngle,
+                      child: Image(
+                        image: AssetImage('images/circle.png'),
+                        height: 65,
+                        width: 65,
+                      ),
                     ),
                   ),
-                  NumberPicker.integer(
-                      initialValue: hour,
-                      minValue: 0,
-                      maxValue: 23,
-                      onChanged: (val) {
-                        setState(() {
-                          hour = val;
-                        });
-                      })
-                ],
+                ),
+              ],
+            ),
+            RaisedButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              onPressed: () {
+                databaseReference.reference().update({'c': '{\"K\":0.0}'});
+              },
+              padding: EdgeInsets.all(16.0),
+              color: Colors.deepOrange,
+              child: Text(
+                "Turn OFF",
+                style: TextStyle(color: Colors.white),
               ),
-              Column(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 10.0),
-                    child: Text(
-                      "MM",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 30.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 10.0),
+                      child: Text(
+                        "HH",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
-                  NumberPicker.integer(
-                      initialValue: min,
-                      minValue: 0,
-                      maxValue: 59,
-                      listViewWidth: 50.0,
-                      onChanged: (val) {
-                        setState(() {
-                          min = val;
-                        });
-                      })
-                ],
-              ),
-              Column(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 10.0),
-                    child: Text(
-                      "SS",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    NumberPicker.integer(
+                        initialValue: hour,
+                        minValue: 0,
+                        maxValue: 23,
+                        onChanged: (val) {
+                          setState(() {
+                            hour = val;
+                          });
+                        })
+                  ],
+                ),
+                Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 10.0),
+                      child: Text(
+                        "MM",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
-                  NumberPicker.integer(
-                      initialValue: sec,
-                      minValue: 0,
-                      maxValue: 59,
-                      onChanged: (val) {
-                        setState(() {
-                          sec = val;
-                        });
-                      })
-                ],
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 25.0,
-          ),
-          Text(
-            timeToDisplay,
-            style: TextStyle(fontSize: 20.0),
-          ),
-          SizedBox(
-            height: 25.0,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0)),
-                color: Colors.green[100],
-                onPressed: started ? start : null,
-                child: Text("Start"),
-              ),
-              RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0)),
-                color: Colors.red[100],
-                onPressed: stopped ? null : stop,
-                child: Text("Stop"),
-              )
-            ],
-          ),
-        ],
+                    NumberPicker.integer(
+                        initialValue: min,
+                        minValue: 0,
+                        maxValue: 59,
+                        listViewWidth: 50.0,
+                        onChanged: (val) {
+                          setState(() {
+                            min = val;
+                          });
+                        })
+                  ],
+                ),
+                Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 10.0),
+                      child: Text(
+                        "SS",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    NumberPicker.integer(
+                        initialValue: sec,
+                        minValue: 0,
+                        maxValue: 59,
+                        onChanged: (val) {
+                          setState(() {
+                            sec = val;
+                          });
+                        })
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 25.0,
+            ),
+            Text(
+              timeToDisplay,
+              style: TextStyle(fontSize: 20.0),
+            ),
+            SizedBox(
+              height: 25.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                RaisedButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0)),
+                  color: Colors.green[100],
+                  onPressed: started ? start : null,
+                  child: Text("Start"),
+                ),
+                RaisedButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0)),
+                  color: Colors.red[100],
+                  onPressed: stopped ? null : stop,
+                  child: Text("Stop"),
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
