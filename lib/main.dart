@@ -53,6 +53,7 @@ class _BodyState extends State<Body> {
       stopped = false;
     });
     timeForTimer = (hour * 60 * 60) + (min * 60) + (sec);
+    databaseReference.reference().update({'a': '{\"A\":$timeForTimer}'});
     Timer.periodic(Duration(seconds: 1), (Timer t) {
       setState(() {
         if (timeForTimer < 1 || checkTimer == false) {
@@ -72,30 +73,32 @@ class _BodyState extends State<Body> {
 //              MaterialPageRoute(
 //                builder: (context) => MyApp(),
 //              ));
-        } else if (timeForTimer < 60) {
-          databaseReference.reference().update({'c': '{\"A\":$timeForTimer}'});
-          timeToDisplay = "Time Left  " + timeForTimer.toString();
-          timeForTimer = timeForTimer - 1;
-        } else if (timeForTimer < 3600) {
-          databaseReference.reference().update({'c': '{\"A\":$timeForTimer}'});
-          int m = timeForTimer ~/ 60;
-          int s = timeForTimer - (60 * m);
-          timeToDisplay = "Time Left  " + m.toString() + ":" + s.toString();
-          timeForTimer = timeForTimer - 1;
-        } else {
-          databaseReference.reference().update({'c': '{\"A\":$timeForTimer}'});
-          int h = timeForTimer ~/ 3600;
-          int t = timeForTimer - (3600 * h);
-          int m = t ~/ 60;
-          int s = t - (60 * m);
-          timeToDisplay = "Time Left  " +
-              h.toString() +
-              ":" +
-              m.toString() +
-              ":" +
-              s.toString();
-          timeForTimer = timeForTimer - 1;
         }
+
+//        else if (timeForTimer < 60) {
+//          databaseReference.reference().update({'a': '{\"A\":$timeForTimer}'});
+//          timeToDisplay = "Time Left  " + timeForTimer.toString();
+//          timeForTimer = timeForTimer - 1;
+//        } else if (timeForTimer < 3600) {
+//          databaseReference.reference().update({'a': '{\"A\":$timeForTimer}'});
+//          int m = timeForTimer ~/ 60;
+//          int s = timeForTimer - (60 * m);
+//          timeToDisplay = "Time Left  " + m.toString() + ":" + s.toString();
+//          timeForTimer = timeForTimer - 1;
+//        } else {
+//          databaseReference.reference().update({'a': '{\"A\":$timeForTimer}'});
+//          int h = timeForTimer ~/ 3600;
+//          int t = timeForTimer - (3600 * h);
+//          int m = t ~/ 60;
+//          int s = t - (60 * m);
+//          timeToDisplay = "Time Left  " +
+//              h.toString() +
+//              ":" +
+//              m.toString() +
+//              ":" +
+//              s.toString();
+//          timeForTimer = timeForTimer - 1;
+//        }
       });
     });
   }
@@ -105,7 +108,7 @@ class _BodyState extends State<Body> {
       started = true;
       stopped = true;
       checkTimer = false;
-      databaseReference.reference().update({'c': '{\"A\":0.0}'});
+      databaseReference.reference().update({'a': '{\"A\":0.0}'});
     });
   }
 
@@ -300,7 +303,7 @@ class _BodyState extends State<Body> {
   void flameVisible() {
     databaseReference.onChildChanged.listen((event) {
       databaseReference.once().then((DataSnapshot snap) {
-        if (jsonDecode(snap.value['s'])['K'] == 0) {
+        if (jsonDecode(snap.value['s'])['G'] == 0) {
           setState(() {
             flame = false;
           });
