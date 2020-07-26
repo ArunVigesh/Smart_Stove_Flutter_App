@@ -12,9 +12,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: Body(),
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: Body(),
+        ),
       ),
     );
   }
@@ -119,7 +121,43 @@ class _BodyState extends State<Body> {
         child: Column(
           children: <Widget>[
             SizedBox(
-              height: 50,
+              height: 16.0,
+            ),
+            Row(
+              children: <Widget>[
+                SizedBox(
+                  width: 16.0,
+                ),
+                FlatButton(
+                  child: Image(
+                    image: AssetImage('images/mobile-calibration.png'),
+                    height: 50.0,
+                  ),
+                ),
+                Text(
+                  "☜ Calibrate",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0),
+                )
+              ],
+            ),
+            Text(
+              "Smart Stove",
+              style: TextStyle(
+                  fontSize: 32.0,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.lightBlueAccent),
+            ),
+            Text(
+              "Control Your Stove from Anywhere",
+              style: TextStyle(
+                  fontSize: 16.0,
+                  fontStyle: FontStyle.normal,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.lightBlue),
+            ),
+            SizedBox(
+              height: 30,
             ),
             Visibility(
               maintainSize: true,
@@ -252,13 +290,13 @@ class _BodyState extends State<Body> {
             SizedBox(
               height: 25.0,
             ),
-            Text(
-              timeToDisplay,
-              style: TextStyle(fontSize: 20.0),
-            ),
-            SizedBox(
-              height: 25.0,
-            ),
+//            Text(
+//              timeToDisplay,
+//              style: TextStyle(fontSize: 20.0),
+//            ),
+//            SizedBox(
+//              height: 25.0,
+//            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
