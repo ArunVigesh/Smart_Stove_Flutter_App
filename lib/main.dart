@@ -55,7 +55,7 @@ class _BodyState extends State<Body> {
       stopped = false;
     });
     timeForTimer = (hour * 60 * 60) + (min * 60) + (sec);
-    //databaseReference.reference().update({'a': '{\"A\":$timeForTimer}'});
+    databaseReference.reference().update({'a': '{\"A\":$timeForTimer}'});
     Timer.periodic(Duration(seconds: 1), (Timer t) {
       setState(() {
         if (timeForTimer < 1 || checkTimer == false) {
@@ -76,17 +76,17 @@ class _BodyState extends State<Body> {
                 builder: (context) => MyApp(),
               ));
         } else if (timeForTimer < 60) {
-          databaseReference.reference().update({'a': '{\"A\":$timeForTimer}'});
+          databaseReference.reference().update({'a': '{\"A\":-1}'});
           timeToDisplay = "Time Left  " + timeForTimer.toString();
           timeForTimer = timeForTimer - 1;
         } else if (timeForTimer < 3600) {
-          databaseReference.reference().update({'a': '{\"A\":$timeForTimer}'});
+          databaseReference.reference().update({'a': '{\"A\":-1}'});
           int m = timeForTimer ~/ 60;
           int s = timeForTimer - (60 * m);
           timeToDisplay = "Time Left  " + m.toString() + ":" + s.toString();
           timeForTimer = timeForTimer - 1;
         } else {
-          databaseReference.reference().update({'a': '{\"A\":$timeForTimer}'});
+          databaseReference.reference().update({'a': '{\"A\":-1}'});
           int h = timeForTimer ~/ 3600;
           int t = timeForTimer - (3600 * h);
           int m = t ~/ 60;
@@ -147,7 +147,7 @@ class _BodyState extends State<Body> {
                   color: Colors.lightBlueAccent),
             ),
             Text(
-              "Control Your Stove from Anywhere",
+              "`Your Stove` in `Your Hands`",
               style: TextStyle(
                   fontSize: 16.0,
                   fontStyle: FontStyle.normal,
@@ -356,10 +356,12 @@ class _BodyState extends State<Body> {
     databaseReference.onChildChanged.listen((event) {
       databaseReference.once().then((DataSnapshot snap) {
         if (jsonDecode(snap.value['s'])['K'] > 0) {
+          var k = jsonDecode(snap.value['s'])['K'];
           setState(() {
             knobAngle =
                 ((jsonDecode(snap.value['s'])['K']) * pi / 180) - pi / 4;
           });
+          databaseReference.reference().update({'c': '{\"K\":$k}'});
         } else {
           setState(() {
             knobAngle = -pi / 4;
